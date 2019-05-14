@@ -27,6 +27,6 @@ PS：云免签必须上传收款码，必须登录云端监控，才能测试通
 
 以上步骤在 宝塔 + php-7.1 + nginx + mysql-10.2 + zfaka-1.4.1+Vmqphp-1.72中测试通过
 
-https://github.com/huangfengye  集成此接口，
-感谢https://github.com/szvone/  提供的免签方案。
-感谢https://github.com/zlkbdotnet/zfaka  提供的发卡方案
+- https://github.com/huangfengye  集成此接口
+- 感谢https://github.com/szvone/  提供的免签方案
+- 感谢https://github.com/zlkbdotnet/zfaka  提供的发卡方案
