@@ -23,7 +23,7 @@ INSERT INTO `t_payment` (`payment`, `payname`, `payimage`, `alias`, `sign_type`,
 
 9、按照zfaka的后台逻辑，自行添加商品，自行测试
 
-PS：云免签必须上传收款码，必须登录云端监控，才能测试通过
+
 
 以上步骤在 宝塔 + php-7.1 + nginx + mysql-10.2 + zfaka-1.4.1+Vmqphp-1.72中测试通过
 
