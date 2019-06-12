@@ -32,7 +32,7 @@ INSERT INTO `t_payment` (`payment`, `payname`, `payimage`, `alias`, `sign_type`,
 ## 赞助
 如果您有经济条件，您可以赞助本项目的开发（下方收款码），如果您不想赞助，也请您点击上面的Star给一个星星，也是对我莫大的认同，感谢各位的支持。
 
-![微信赞助](https://puu.sh/DEYmz/1adb12e496.jpg)![支付宝赞助](https://puu.sh/DEYmS/32f8237fd8.jpg)
+![微信赞助](https://puu.sh/DF0jt/ded5938c8c.jpg)![支付宝赞助](https://puu.sh/DEYmS/32f8237fd8.jpg)
 
 ## 感谢
 - https://github.com/huangfengye  集成此接口
