@@ -27,6 +27,8 @@ INSERT INTO `t_payment` (`payment`, `payname`, `payimage`, `alias`, `sign_type`,
 
 以上步骤在 宝塔 + php-7.1 + nginx + mysql-10.2 + zfaka-1.4.1+Vmqphp-1.81中测试通过
 
+![微信赞助](https://puu.sh/DEYmz/1adb12e496.jpg)![支付宝赞助](https://puu.sh/DEYmS/32f8237fd8.jpg)
+
 - https://github.com/huangfengye  集成此接口
 - 感谢https://github.com/szvone/  提供的免签方案
 - 感谢https://github.com/zlkbdotnet/zfaka  提供的发卡方案
