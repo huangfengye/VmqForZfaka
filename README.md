@@ -6,10 +6,6 @@
 
  + 将文件夹 tmdpayalipay和tmdpaywx  解压到网站目录application/library/Pay文件夹中，此时在Pay文件夹中会多出一个文件夹，名字分别为：tmdpayalipay 、tmdpaywx
 
- + 将文件夹 tmdpayalipay 中的tmdpayalipay.php打开，编辑（private $apiHost="https://xxxxxx.cn/createOrder ";）这段代码 为你自己的V免签服务端地址
-
- + 将文件夹 tmdpaywx     中的tmdpaywx.php    打开，编辑（private $apiHost="https://xxxxxx.cn/createOrder ";） 这段代码 为你自己的V免签服务端地址
-
  + 将文件  tmdpayalipay.html 、tmdpaywx.html解压到网站目录application\modules\Admin\views\payment\tpl文件夹中  
 
  + 修改数据库，在faka数据库中运行下面的sql语句，建议使用宝塔环境的phpmyadmin软件进行修改，省时省力
