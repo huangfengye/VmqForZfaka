@@ -19,6 +19,7 @@ class tmdpayalipay
 	{
 		try
 		{
+	    $payGateWay= $payconfig['configure3'].'/createOrder';
             $payId =$params['orderid'];
             $type  =2;//支付宝
             $price =(float)$params['money'];
@@ -41,7 +42,7 @@ class tmdpayalipay
             );
 
 			$ch = curl_init(); //使用curl请求
-            curl_setopt($ch, CURLOPT_URL, $this->apiHost);
+            curl_setopt($ch, CURLOPT_URL,  $payGateWay);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $config);
