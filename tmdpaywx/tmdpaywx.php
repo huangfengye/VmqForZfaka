@@ -11,7 +11,6 @@ use \Pay\notify;
 
 class tmdpaywx
 {
-	private $apiHost="https://xxxx.cn/createOrder";
 	private $paymethod ="tmdpaywx";
 	
 	//处理请求
