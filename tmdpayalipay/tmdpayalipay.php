@@ -63,7 +63,7 @@ class tmdpayalipay
 					//计算关闭时间
                      $closetime = $payconfig['overtime'];
                     
-					$result = array('type'=>0,'subjump'=>1,'subjumpurl'=>$tmdpay_data['data']['payUrl'],'paymethod'=>$this->paymethod,'qr' => $params['qrserver'] . urlencode($tmdpay_data['data']['payUrl']),'payname'=>$payconfig['payname'],'overtime'=>$closetime,'money'=>$money);
+					$result = array('type'=>0,'subjump'=>0,'subjumpurl'=>$tmdpay_data['data']['payUrl'],'paymethod'=>$this->paymethod,'qr' => $params['qrserver'] . urlencode($tmdpay_data['data']['payUrl']),'payname'=>$payconfig['payname'],'overtime'=>$closetime,'money'=>$money);
 					return array('code'=>1,'msg'=>'success','data'=>$result);
 				}
 			}else
