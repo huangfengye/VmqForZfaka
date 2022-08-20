@@ -19,6 +19,7 @@ class tmdpaywx
 		try
 		{
 	    $payGateWay= $payconfig['configure3'].'/createOrder';
+	    $payIdGateWay= $payconfig['configure3'].'/getOrderPayId';
             $payId =$params['orderid'];
             $type  =1;//微信
             $price =(float)$params['money'];
@@ -28,54 +29,94 @@ class tmdpaywx
             $return_url = $params['weburl']. "/query/auto/{$params['orderid']}.html";  //同步地址
             $notify_url = $params['weburl'] . '/product/notify/?paymethod=' . $this->paymethod;  //支付成功后回调地址
             $sign  = md5($payId . $param . $type . $price . $key);
-
-			$config =array(
-                'payId'=>$payId,
-                'type'=>$type,
-                'price'=>$price,
-                'sign'=>$sign,
-				"param" =>$param,
-				"isHtml"=>$isHtml,
-				"return_url"=>$return_url,
-				'notifyUrl' => $notify_url,
+            
+            
+            $payIdConfig = array(
+                'pay_id'=>$payId,
             );
+            
+            $chPayId = curl_init(); //使用curl请求
+            curl_setopt($chPayId, CURLOPT_URL,  $payIdGateWay);
+            curl_setopt($chPayId, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($chPayId, CURLOPT_CONNECTTIMEOUT, 5);
+            curl_setopt($chPayId, CURLOPT_POSTFIELDS, $payIdConfig);
+            $payId_json = curl_exec($chPayId);
+            curl_close($chPayId);
 
-			$ch = curl_init(); //使用curl请求
-            curl_setopt($ch, CURLOPT_URL,  $payGateWay);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $config);
-            $tmdpay_json = curl_exec($ch);
-            curl_close($ch);
-
-            $tmdpay_data = json_decode($tmdpay_json,true);
-           
-			if(is_array($tmdpay_data))
+            $payId_data = json_decode($payId_json,true);
+            
+            if(is_array($payId_data))
 			{
-				if($tmdpay_data['code']<1)
+				if($payId_data['code']<1)
 				{
-					return array('code'=>1002,'msg'=>$tmdpay_data['msg'],'data'=>'');
+				// 	return array('code'=>1002,'msg'=>$payId_data['msg'],'data'=>'');
+				//获取失败说明之前没有订单，创建新订单
+				    	$config =array(
+                        'payId'=>$payId,
+                        'type'=>$type,
+                        'price'=>$price,
+                        'sign'=>$sign,
+        				"param" =>$param,
+        				"isHtml"=>$isHtml,
+        				"return_url"=>$return_url,
+        				'notifyUrl' => $notify_url,
+                    );
+        
+        			$ch = curl_init(); //使用curl请求
+                    curl_setopt($ch, CURLOPT_URL,  $payGateWay);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $config);
+                    $tmdpay_json = curl_exec($ch);
+                    curl_close($ch);
+        
+                    $tmdpay_data = json_decode($tmdpay_json,true);
+        			if(is_array($tmdpay_data))
+        			{
+        				if($tmdpay_data['code']<1)
+        				{
+        					return array('code'=>1002,'msg'=>$tmdpay_data['msg'],'data'=>'');
+        				}else
+        				{
+                            $qr = $tmdpay_data['data']['payUrl'];                   
+        					$money = isset($tmdpay_data['data']['reallyPrice'])?$tmdpay_data['data']['reallyPrice']:$params['money'];
+        					//计算关闭时间
+                             $closetime =300-(time()-$tmdpay_data['data']['date']);
+                            
+        					$result = array('type'=>0,'subjump'=>0,'subjumpurl'=>$tmdpay_data['data']['payUrl'],'paymethod'=>$this->paymethod,'qr' => $params['qrserver'] . urlencode($tmdpay_data['data']['payUrl']),'payname'=>$payconfig['payname'],'overtime'=>$closetime,'money'=>$money);
+        					return array('code'=>1,'msg'=>'success','data'=>$result);
+        				}
+        			}else
+        			{
+        				return array('code'=>1001,'msg'=>"支付接口请求失败",'data'=>'');
+        			}
 				}else
 				{
-                    $qr = $tmdpay_data['data']['payUrl'];                   
-					$money = isset($tmdpay_data['data']['reallyPrice'])?$tmdpay_data['data']['reallyPrice']:$params['money'];
-					//计算关闭时间
-                    $closetime = $payconfig['overtime'];
-                    
-					$result = array('type'=>0,'subjump'=>0,'subjumpurl'=>$tmdpay_data['data']['payUrl'],'paymethod'=>$this->paymethod,'qr' => $params['qrserver'] . urlencode($tmdpay_data['data']['payUrl']),'payname'=>$payconfig['payname'],'overtime'=>$closetime,'money'=>$money);
-					return array('code'=>1,'msg'=>'success','data'=>$result);
+				    if ($payId_data['data']['state'] == 0){
+    				    $qr = $payId_data['data']['payUrl'];                   
+    					$money = isset($payId_data['data']['reallyPrice'])?$payId_data['data']['reallyPrice']:$params['money'];
+    					//计算关闭时间
+                        $closetime =300-(time()-$payId_data['data']['date']);
+                        
+    					$result = array('type'=>0,'subjump'=>0,'subjumpurl'=>$payId_data['data']['payUrl'],'paymethod'=>$this->paymethod,'qr' => $params['qrserver'] . urlencode($payId_data['data']['payUrl']),'payname'=>$payconfig['payname'],'overtime'=>$closetime,'money'=>$money);
+    					return array('code'=>1,'msg'=>'success','data'=>$result); 
+				    }else
+				    {
+				        return array('code'=>1003,'msg'=>"订单超时",'data'=>'');
+				    }
+                  
 				}
 			}else
 			{
 				return array('code'=>1001,'msg'=>"支付接口请求失败",'data'=>'');
 			}
+
 		} 
 		catch (\Exception $e) 
 		{
 			return array('code'=>1000,'msg'=>$e->getMessage(),'data'=>'');
 		}
 	}
-	
 	
 	//处理返回
 	public function notify($payconfig)
